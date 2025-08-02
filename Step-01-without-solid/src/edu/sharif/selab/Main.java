@@ -1,3 +1,5 @@
+package edu.sharif.selab;
+
 import edu.sharif.selab.models.EmailMessage;
 import edu.sharif.selab.models.Message;
 import edu.sharif.selab.models.SmsMessage;
