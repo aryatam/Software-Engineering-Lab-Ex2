@@ -10,13 +10,11 @@
 | 6    | درون `TelegramMessageService`                                | افزودن متد `sendTelegramMessage` | متدی برای اعتبارسنجی و ارسال پیام تلگرام               | 1             |
 | 7    | درون `TelegramMessageService`                                | افزودن متد `validateId`      | متدی خصوصی برای چک‌کردن non-empty بودن ID              | 1             |
 
-## مرحله سوم: تحلیل SOLID
+## مرحله سوم: تحلیل SOLID (بدون تغییر در Main)
 
-بر اساس تغییرات مرحله قبل، موارد تحقق و نقض هر یک از اصول SOLID (به جز SRP) را در کلاس‌های بسته `services` و کلاس `Main` بررسی کنید:
-
-| اصل مربوطه (از SOLID)                         | موارد تحقق                                                                                                        | موارد نقض                                                                                                                      |
-|:----------------------------------------------|:------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|
-| **Open–Closed Principle (OCP)**               | افزودن پشتیبانی از Telegram بدون تغییر در `SmsMessageService` یا `EmailMessageService`.                          | در `Main` برای پشتیبانی از Telegram مجبور به تغییر و اضافه‌کردن گزینه و بلوک جدید شده‌ایم.                                    |
-| **Liskov Substitution Principle (LSP)**       | پیاده‌سازی سرویس‌های مختلف با یک اینترفیس اشتراکی (`MessageService`) قابل درک است.                              | `TelegramMessageService` تنها متد `sendTelegramMessage` را دارد و متدهای دیگر را با Exception پاسخ می‌دهد؛ لذا نمی‌توان جایگزین آزادانه کرد. |
-| **Interface Segregation Principle (ISP)**     | —                                                                                                                  | اینترفیس `MessageService` تمام سرویس‌ها را مجبور می‌کند متدهای `sendSmsMessage` و `sendEmailMessage` را پیاده‌سازی یا با استثنا رد کنند. |
-| **Dependency Inversion Principle (DIP)**      | وابستگی `Main` به اینترفیس `MessageService` است، نه به پیاده‌سازی‌های جزئی.                                      | در `Main` مستقیماً با `new SmsMessageService()` و غیره پیاده‌سازی‌ها ساخته می‌شوند به‌جای تزریق از طریق سازنده یا فکتوری.         |
+| اصل مربوطه (از SOLID) | موارد تحقق | موارد نقض |
+| --------------------- | ---------- | ---------- |
+| **Open–Closed Principle (OCP)** | افزودن کلاس‌های جدید `TelegramMessage` و `TelegramMessageService` بدون نیاز به تغییر در کدهای موجود (`Main`, `SmsMessageService`, `EmailMessageService`). | — |
+| **Liskov Substitution Principle (LSP)** | — | هر سه سرویس (`SmsMessageService`, `EmailMessageService`, `TelegramMessageService`) در متدهای نامرتبط `UnsupportedOperationException` پرتاب می‌کنند؛ بنابراین شیءهای این کلاس‌ها نمی‌توانند به‌طور کامل جایگزین نوع پایهٔ `MessageService` شوند. |
+| **Interface Segregation Principle (ISP)** | — | اینترفیس `MessageService` سرویس‌ها را مجبور می‌کند متدهای ارسال SMS و Email را با هم پیاده‌سازی کنند (یا استثنا بدهند)؛ در نتیجه کلاینت‌ها متدهای بلااستفاده را می‌بینند. |
+| **Dependency Inversion Principle (DIP)** | متغیر `messageService` در `Main` از نوع انتزاعی `MessageService` است. | `Main` به‌جای دریافت وابستگی از بیرون، پیاده‌سازی‌های جزئی (`new SmsMessageService()` و `new EmailMessageService()`) را مستقیماً می‌سازد؛ بنابراین به کلاس‌های سطح پایین وابسته می‌شود. |
