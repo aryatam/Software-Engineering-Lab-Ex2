@@ -1,4 +1,3 @@
-// SmsMessageService.java
 package edu.sharif.selab.services;
 
 import edu.sharif.selab.models.SmsMessage;

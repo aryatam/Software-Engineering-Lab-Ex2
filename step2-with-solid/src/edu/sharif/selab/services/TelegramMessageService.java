@@ -1,6 +1,4 @@
-// TelegramMessageService.java
 package edu.sharif.selab.services;
-
 import edu.sharif.selab.models.TelegramMessage;
 
 public class TelegramMessageService implements TelegramService {

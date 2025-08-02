@@ -1,13 +1,12 @@
 package edu.sharif.selab.models;
 
 public class Message {
-    String content;
+    private final String content;
 
+    public Message(String content) {
+        this.content = content;
+    }
     public String getContent() {
         return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 }

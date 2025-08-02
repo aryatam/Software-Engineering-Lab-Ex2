@@ -9,11 +9,9 @@ public class TelegramMessage extends Message {
         this.sourceId = sourceId;
         this.targetId = targetId;
     }
-
     public String getSourceId() {
         return sourceId;
     }
-
     public String getTargetId() {
         return targetId;
     }

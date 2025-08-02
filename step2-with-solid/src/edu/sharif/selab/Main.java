@@ -1,8 +1,14 @@
-// Main.java
 package edu.sharif.selab;
 
-import edu.sharif.selab.models.*;
-import edu.sharif.selab.services.*;
+import edu.sharif.selab.models.EmailMessage;
+import edu.sharif.selab.models.SmsMessage;
+import edu.sharif.selab.models.TelegramMessage;
+import edu.sharif.selab.services.EmailMessageService;
+import edu.sharif.selab.services.EmailService;
+import edu.sharif.selab.services.SmsMessageService;
+import edu.sharif.selab.services.SmsService;
+import edu.sharif.selab.services.TelegramMessageService;
+import edu.sharif.selab.services.TelegramService;
 
 import java.util.Scanner;
 
@@ -25,7 +31,6 @@ public class Main {
         while (true) {
             System.out.println("Choose sending method:\n1) SMS\n2) Email\n3) Telegram\n(other to exit)");
             String choice = scanner.nextLine();
-            Message msg = null;
             switch (choice) {
                 case "1" -> {
                     System.out.print("Source phone: ");
@@ -34,8 +39,7 @@ public class Main {
                     String dst = scanner.nextLine();
                     System.out.print("Text: ");
                     String txt = scanner.nextLine();
-                    msg = new SmsMessage(src, dst, txt);
-                    smsService.sendSms((SmsMessage) msg);
+                    smsService.sendSms(new SmsMessage(src, dst, txt));
                 }
                 case "2" -> {
                     System.out.print("Source email: ");
@@ -44,8 +48,7 @@ public class Main {
                     String dst = scanner.nextLine();
                     System.out.print("Text: ");
                     String txt = scanner.nextLine();
-                    msg = new EmailMessage(src, dst, txt);
-                    emailService.sendEmail((EmailMessage) msg);
+                    emailService.sendEmail(new EmailMessage(src, dst, txt));
                 }
                 case "3" -> {
                     System.out.print("Source ID: ");
@@ -54,8 +57,7 @@ public class Main {
                     String dst = scanner.nextLine();
                     System.out.print("Text: ");
                     String txt = scanner.nextLine();
-                    msg = new TelegramMessage(src, dst, txt);
-                    telegramService.sendTelegram((TelegramMessage) msg);
+                    telegramService.sendTelegram(new TelegramMessage(src, dst, txt));
                 }
                 default -> {
                     System.out.println("Goodbye!");
