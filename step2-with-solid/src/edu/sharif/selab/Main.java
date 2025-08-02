@@ -1,73 +1,75 @@
-import edu.sharif.selab.models.EmailMessage;
-import edu.sharif.selab.models.Message;
-import edu.sharif.selab.models.SmsMessage;
-import edu.sharif.selab.services.EmailMessageService;
-import edu.sharif.selab.services.MessageService;
-import edu.sharif.selab.services.SmsMessageService;
+// Main.java
+package edu.sharif.selab;
+
+import edu.sharif.selab.models.*;
+import edu.sharif.selab.services.*;
 
 import java.util.Scanner;
 
 public class Main {
-    public static final Scanner scanner = new Scanner(System.in);
+
+    private final SmsService smsService;
+    private final EmailService emailService;
+    private final TelegramService telegramService;
+    private final Scanner scanner = new Scanner(System.in);
+
+    public Main(SmsService smsService,
+                EmailService emailService,
+                TelegramService telegramService) {
+        this.smsService = smsService;
+        this.emailService = emailService;
+        this.telegramService = telegramService;
+    }
+
+    public void run() {
+        while (true) {
+            System.out.println("Choose sending method:\n1) SMS\n2) Email\n3) Telegram\n(other to exit)");
+            String choice = scanner.nextLine();
+            Message msg = null;
+            switch (choice) {
+                case "1" -> {
+                    System.out.print("Source phone: ");
+                    String src = scanner.nextLine();
+                    System.out.print("Target phone: ");
+                    String dst = scanner.nextLine();
+                    System.out.print("Text: ");
+                    String txt = scanner.nextLine();
+                    msg = new SmsMessage(src, dst, txt);
+                    smsService.sendSms((SmsMessage) msg);
+                }
+                case "2" -> {
+                    System.out.print("Source email: ");
+                    String src = scanner.nextLine();
+                    System.out.print("Target email: ");
+                    String dst = scanner.nextLine();
+                    System.out.print("Text: ");
+                    String txt = scanner.nextLine();
+                    msg = new EmailMessage(src, dst, txt);
+                    emailService.sendEmail((EmailMessage) msg);
+                }
+                case "3" -> {
+                    System.out.print("Source ID: ");
+                    String src = scanner.nextLine();
+                    System.out.print("Target ID: ");
+                    String dst = scanner.nextLine();
+                    System.out.print("Text: ");
+                    String txt = scanner.nextLine();
+                    msg = new TelegramMessage(src, dst, txt);
+                    telegramService.sendTelegram((TelegramMessage) msg);
+                }
+                default -> {
+                    System.out.println("Goodbye!");
+                    return;
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
-        System.out.println("Hello and Welcome to SE Lab Messenger.");
-        int userAnswer=0;
-        do{
-            Message message = null;
-            MessageService messageService;
-            String source;
-            String target;
-            String content;
+        SmsService sms = new SmsMessageService();
+        EmailService email = new EmailMessageService();
+        TelegramService tg = new TelegramMessageService();
 
-            System.out.println("In order to send Sms message enter 1");
-            System.out.println("In order to send Email message enter 2");
-            System.out.println("In order to Exit, Enter 0");
-
-            userAnswer= scanner.nextInt();
-
-            if(userAnswer==0){
-                break;
-            }
-
-            switch (userAnswer){
-                case 1:
-                    SmsMessage smsMessage = new SmsMessage();
-                    System.out.print("Enter source phone : ");
-                    source = scanner.next();
-                    smsMessage.setSourcePhoneNumber(source);
-                    System.out.print("Enter target phone : ");
-                    target = scanner.next();
-                    smsMessage.setTargetPhoneNumber(target);
-                    System.out.println("Write Your Message : ");
-                    content = scanner.next(".*$");
-                    smsMessage.setContent(content);
-                    message = smsMessage;
-                    break;
-                case 2:
-                    EmailMessage emailMessage = new EmailMessage();
-                    System.out.print("Enter source phone : ");
-                    source = scanner.next();
-                    emailMessage.setSourceEmailAddress(source);
-                    System.out.print("Enter target phone : ");
-                    target = scanner.next();
-                    emailMessage.setTargetEmailAddress(target);
-                    System.out.println("Write Your Message : ");
-                    content = scanner.next();
-                    emailMessage.setContent(content);
-                    message = emailMessage;
-                    break;
-            }
-
-            if(message instanceof SmsMessage){
-                messageService = new SmsMessageService();
-                messageService.sendSmsMessage((SmsMessage) message);
-            }else if(message instanceof EmailMessage){
-                messageService = new EmailMessageService();
-                messageService.sendEmailMessage((EmailMessage) message);
-            }
-
-        }while (true);
+        new Main(sms, email, tg).run();
     }
 }
-
-
