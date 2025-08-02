@@ -13,8 +13,8 @@
 ## مرحله سوم: تحلیل SOLID (بدون تغییر در Main)
 
 | اصل مربوطه (از SOLID) | موارد تحقق | موارد نقض |
-| --------------------- | ---------- | ---------- |
-| **Open–Closed Principle (OCP)** | افزودن کلاس‌های جدید `TelegramMessage` و `TelegramMessageService` بدون نیاز به تغییر در کدهای موجود (`Main`, `SmsMessageService`, `EmailMessageService`). | — |
-| **Liskov Substitution Principle (LSP)** | — | هر سه سرویس (`SmsMessageService`, `EmailMessageService`, `TelegramMessageService`) در متدهای نامرتبط `UnsupportedOperationException` پرتاب می‌کنند؛ بنابراین شیءهای این کلاس‌ها نمی‌توانند به‌طور کامل جایگزین نوع پایهٔ `MessageService` شوند. |
-| **Interface Segregation Principle (ISP)** | — | اینترفیس `MessageService` سرویس‌ها را مجبور می‌کند متدهای ارسال SMS و Email را با هم پیاده‌سازی کنند (یا استثنا بدهند)؛ در نتیجه کلاینت‌ها متدهای بلااستفاده را می‌بینند. |
-| **Dependency Inversion Principle (DIP)** | متغیر `messageService` در `Main` از نوع انتزاعی `MessageService` است. | `Main` به‌جای دریافت وابستگی از بیرون، پیاده‌سازی‌های جزئی (`new SmsMessageService()` و `new EmailMessageService()`) را مستقیماً می‌سازد؛ بنابراین به کلاس‌های سطح پایین وابسته می‌شود. |
+| ---: | ---: | ---: |
+| **Open–Closed Principle (OCP)** | افزودن کلاس‌های جدید `TelegramMessage` و `TelegramMessageService` بدون نیاز به تغییر در فایل‌های موجود. | — |
+| **Liskov Substitution Principle (LSP)** | — | سرویس‌ها در متدهای نامرتبط `UnsupportedOperationException` پرتاب می‌کنند؛ لذا جایگزینی کامل به‌عنوان `MessageService` ممکن نیست. |
+| **Interface Segregation Principle (ISP)** | — | رابط `MessageService` سرویس‌ها را وادار به پیاده‌سازی متدهای بلااستفاده می‌کند. |
+| **Dependency Inversion Principle (DIP)** | متغیّر `messageService` در `Main` از نوع انتزاعی است. | `Main` به‌جای تزریق وابستگی، پیاده‌سازی‌ها را مستقیماً با `new` می‌سازد. |
